@@ -2,7 +2,7 @@ object Form1: TForm1
   Left = 838
   Top = 337
   Width = 307
-  Height = 338
+  Height = 382
   Caption = 'Thread Test'
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -23,28 +23,28 @@ object Form1: TForm1
   end
   object MainCounterLabel: TLabel
     Left = 192
-    Top = 166
+    Top = 214
     Width = 66
     Height = 13
     Caption = 'Main Counter:'
   end
   object Thread1CounterLabel: TLabel
     Left = 192
-    Top = 199
+    Top = 247
     Width = 86
     Height = 13
     Caption = 'Thread 1 Counter:'
   end
   object Thread2CounterLabel: TLabel
     Left = 192
-    Top = 231
+    Top = 279
     Width = 86
     Height = 13
     Caption = 'Thread 2 Counter:'
   end
   object Thread3CounterLabel: TLabel
     Left = 192
-    Top = 263
+    Top = 311
     Width = 86
     Height = 13
     Caption = 'Thread 3 Counter:'
@@ -55,9 +55,16 @@ object Form1: TForm1
     Width = 262
     Height = 1
   end
+  object ThreadCountLabel: TLabel
+    Left = 88
+    Top = 158
+    Width = 68
+    Height = 13
+    Caption = 'Thread Count:'
+  end
   object MainCounterEdit: TEdit
     Left = 104
-    Top = 163
+    Top = 211
     Width = 81
     Height = 21
     Color = clSkyBlue
@@ -66,7 +73,7 @@ object Form1: TForm1
   end
   object Thread1CounterEdit: TEdit
     Left = 104
-    Top = 195
+    Top = 243
     Width = 81
     Height = 21
     Color = clSkyBlue
@@ -74,7 +81,7 @@ object Form1: TForm1
   end
   object Thread1Button: TButton
     Left = 16
-    Top = 192
+    Top = 240
     Width = 75
     Height = 25
     Caption = 'Start Thread'
@@ -83,7 +90,7 @@ object Form1: TForm1
   end
   object MainButton: TButton
     Left = 16
-    Top = 160
+    Top = 208
     Width = 75
     Height = 25
     Caption = 'Start Main'
@@ -100,7 +107,7 @@ object Form1: TForm1
   end
   object Thread2CounterEdit: TEdit
     Left = 104
-    Top = 226
+    Top = 274
     Width = 81
     Height = 21
     Color = clSkyBlue
@@ -109,7 +116,7 @@ object Form1: TForm1
   object Thread2Button: TButton
     Tag = 1
     Left = 16
-    Top = 224
+    Top = 272
     Width = 75
     Height = 25
     Caption = 'Start Thread'
@@ -118,7 +125,7 @@ object Form1: TForm1
   end
   object Thread3CounterEdit: TEdit
     Left = 104
-    Top = 258
+    Top = 306
     Width = 81
     Height = 21
     Color = clSkyBlue
@@ -127,7 +134,7 @@ object Form1: TForm1
   object Thread3Button: TButton
     Tag = 2
     Left = 16
-    Top = 256
+    Top = 304
     Width = 75
     Height = 25
     Caption = 'Start Thread'
@@ -145,5 +152,15 @@ object Form1: TForm1
       'Use Synchronize()'
       'Use QueueUserAPC() + SleepEx()')
     TabOrder = 9
+  end
+  object ThreadCountEdit: TEdit
+    Left = 168
+    Top = 155
+    Width = 25
+    Height = 21
+    Color = clSkyBlue
+    ReadOnly = True
+    TabOrder = 10
+    Text = '0'
   end
 end
