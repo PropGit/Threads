@@ -52,7 +52,6 @@ type
 
   {Define the non-GUI processing thread class}
   TProcessingThread = class(TThread)
-  private
     FID            : Cardinal;                        {The unique ID given to this instance; indicates what button and edit control is associated with the thread}
     FCounter       : Cardinal;                        {The counter value (this is what is "processed" by the thread in this example application)}
     FCommType      : TCommType;                       {Thread communication type (technique).  0 = communicate via blocking Synchronize() calls, 1 = communicate via non-blocking QueueUserAPC() calls}
@@ -280,8 +279,8 @@ procedure TProcessingThread.SyncUpdate;
 begin
   {Update GUI}
   ThreadEdit[FID].Text := IntToStr(FCounter);
-  ThreadEdit[FID].Update;
-//  Application.ProcessMessages;
+//  ThreadEdit[FID].Update;
+  Application.ProcessMessages;
 end;
 
 {------------------------------------------------------------------------------}
@@ -302,27 +301,39 @@ end;
 {oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo}
 
 procedure TProcessingThread.Execute;
-{Processing Thread's highest execution method.  When this method exits, thread terminates}
+{Processing Thread's main execution method.  When this method exits, thread terminates}
 var
   Idx : Cardinal;
 begin
-  {Perform counting operation}
-  for Idx := 0 to FMaxValue do
+  {For speed, the "processing" is dublicated below, separated by the chosen communication type of this example application}
+
+  {Either communicate results via Syncronize() to caller "GUI" thread...}
+  if FCommType = Sync then
     begin
-    {Update the count}
-    FCounter := Idx;
-    {Communicate the new result to caller "GUI" thread}
-    case FCommType of
-      Sync: Synchronize(SyncUpdate);
-      QAPC: QueueUserAPC(@QAPCUpdate, FCallerThread, (FID shl 30) + (FCounter and $3FFFFFFF));
-    end;
+    {Perform counting operation}
+    for Idx := 0 to FMaxValue do
+      begin
+      FCounter := Idx;           {Update the count}
+      Synchronize(SyncUpdate);   {Push result to GUI}
+      end;
+    {Signal done; re-enable changes and button clicks as appropriate}
+    Synchronize(SyncDone);
     end;
 
-  {Signal done; re-enable changes and button clicks as appropriate}
-  case FCommType of
-    Sync: Synchronize(SyncDone);
-    QAPC: QueueUserAPC(@QAPCDone, FCallerThread, FID shl 30);
-  end;
+  {-- or --}
+
+  {Either communicate results via QueueUserAPC() to caller "GUI" thread...}
+  if FCommType = QAPC then
+    begin 
+    {Perform counting operation}
+    for Idx := 0 to FMaxValue do
+      begin
+      FCounter := Idx;                                                                     {Update the count}
+      QueueUserAPC(@QAPCUpdate, FCallerThread, (FID shl 30) + (FCounter and $3FFFFFFF));   {Push result to GUI}
+      end;
+    {Signal done; re-enable changes and button clicks as appropriate}
+    QueueUserAPC(@QAPCDone, FCallerThread, FID shl 30);
+    end;
 end;
 
 {oooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo}
