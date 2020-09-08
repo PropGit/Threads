@@ -128,8 +128,8 @@ begin
   for Idx := 0 to MaxValue do
     begin
     MainValue := Idx;
+    sleepex(1, True);
     Update;
-    sleepex(0, True);
     end;
 
   {Signal done; re-enable main button and max count changesand as appropriate}
@@ -195,7 +195,7 @@ begin
   while QtyProcs > 0 do {Wait for processing threads to finish; meanwhile update the screen (directly through Application.ProcessMessages / indirectly through threaded APC calls to UpdateThreadEdit)}
     begin
     sleepex(0, True);
-//    Application.ProcessMessages;
+    Application.ProcessMessages;
     end;
 //    if (sleepex(0, False) <> STATUS_USER_APC) then Application.ProcessMessages;
 end;
